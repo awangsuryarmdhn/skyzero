@@ -1,0 +1,12 @@
+{
+    "welcome": "☁️ *SKY LAUNDRY RASAU JAYA* ☁️\n\n_#StopMencuciDiRumah_\n_Bersih - Rapi - Wangi - Cepat_\n\nHalo! Selamat datang di layanan asisten virtual Sky Laundry. 🛵\n\n*Layanan Kami:*\n✅ Cuci Komplit (Satuan/Kiloan)\n✅ *Mulai Harga Rp 4.000*\n✅ *Cuci Express 2 Jam Beres*\n✅ Gratis Antar Jemput\n\n━━━━━━━━━━━━━━━━━━\n📋 *DAFTAR PERINTAH BOT*\n━━━━━━━━━━━━━━━━━━\n\n🔍 *Cek Status Pesanan*\nKetik: *STATUS [NOMOR_NOTA]*\nContoh: *STATUS SKY-12345*\n\n📱 *Cek Status via No. HP*\nKetik: *STATUS [NOMOR_HP]*\nContoh: *STATUS 08123456789*\n\n👤 *Cek Status via Nama*\nKetik: *STATUS [NAMA]*\nContoh: *STATUS Budi*\n\n💰 *Info Harga*\nKetik: *HARGA* atau *TARIF*\n\n📍 *Info Alamat/Lokasi*\nKetik: *ALAMAT* atau *LOKASI*\n\n⏰ *Jam Operasional*\nKetik: *JAM BUKA*\n\n━━━━━━━━━━━━━━━━━━\n📍 *Info Outlet*\nJl. Rasau Jaya (Depan Gereja Protestan)\nWA: 0895-3870-60474\n\n_Percayakan cucian Anda pada kami!_ ✨",
+    "statusNotFound": "❌ Maaf, tidak ditemukan pesanan dengan ID/Nama/No.HP: *\"{keyword}\"*.\n\nPastikan data yang Anda masukkan benar.",
+    "statusError": "⚠️ Maaf, ada gangguan pada sistem kami saat mengecek status. Silakan coba lagi nanti.",
+    "invalidUpdateFormat": "❌ Format salah.\nGunakan: *UPDATE [NO_NOTA] [STATUS]*\nContoh: *UPDATE SKY-001 READY*",
+    "invalidStatus": "❌ Status tidak valid.\nPilih: PENDING, WASHING, IRONING, READY, COMPLETED",
+    "orderNotFound": "❌ Pesanan *{orderId}* tidak ditemukan.",
+    "updateSuccess": "✅ Status pesanan *{orderId}* berhasil diubah menjadi *{newStatus}*.",
+    "broadcastStart": "📢 Memproses broadcast ke {count} kontak...",
+    "broadcastFail": "❌ Broadcast gagal.",
+    "default": "🤔 Maaf, perintah tidak dikenali.\n\nBerikut perintah yang tersedia:\n\n🔍 *STATUS [Nota/HP/Nama]* — Cek pesanan\n💰 *HARGA* — Info harga\n📍 *ALAMAT* — Lokasi outlet\n⏰ *JAM BUKA* — Jam operasional\n📋 *MENU* — Lihat semua perintah\n\nContoh: *STATUS SKY-12345* atau *STATUS 08123456789*"
+}

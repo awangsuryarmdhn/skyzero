@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# WhatsApp Session (jangan upload ke GitHub!)
+.wwebjs_auth/
+.wwebjs_cache/
+
+# Environment Variables
+.env
+
+# OS Files
+Thumbs.db
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*

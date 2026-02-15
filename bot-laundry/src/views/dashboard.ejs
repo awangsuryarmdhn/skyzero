@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Sky Laundry Bot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans">
+
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-xl">
+                <i class="fas fa-robot"></i>
+            </div>
+            <div>
+                <h1 class="font-black text-xl text-slate-800">SkyBot Panel</h1>
+                <p class="text-xs text-slate-500 font-bold uppercase tracking-wider">v1.0.0</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-4">
+            <span class="text-sm font-bold text-slate-600">Halo, <%= user.name %></span>
+            <a href="/admin/logout" class="bg-red-50 text-red-600 px-4 py-2 rounded-lg text-sm font-bold hover:bg-red-100 transition">
+                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+            </a>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto p-6 md:p-8">
+        
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <!-- Status Bot -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div class="flex justify-between items-start mb-4" id="statusBot">
+                    <div class="bg-blue-50 text-blue-600 w-12 h-12 rounded-xl flex items-center justify-center text-xl">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <% if (qrStatus === 'READY') { %>
+                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold uppercase">Connected</span>
+                    <% } else { %>
+                        <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold uppercase">Disconnected</span>
+                    <% } %>
+                </div>
+                <h3 class="text-slate-500 text-sm font-bold uppercase tracking-wider">Status Bot</h3>
+                <p class="text-2xl font-black text-slate-800 mt-1" id="statusText"><%= qrStatus === 'READY' ? 'Online' : 'Offline' %></p>
+            </div>
+
+            <!-- Total Users -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div class="bg-purple-50 text-purple-600 w-12 h-12 rounded-xl flex items-center justify-center text-xl mb-4">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="text-slate-500 text-sm font-bold uppercase tracking-wider">Total Pelanggan</h3>
+                <p class="text-2xl font-black text-slate-800 mt-1"><%= stats.totalCustomers %></p>
+            </div>
+
+            <!-- Orders Today -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div class="bg-amber-50 text-amber-600 w-12 h-12 rounded-xl flex items-center justify-center text-xl mb-4">
+                    <i class="fas fa-shopping-basket"></i>
+                </div>
+                <h3 class="text-slate-500 text-sm font-bold uppercase tracking-wider">Order Hari Ini</h3>
+                <p class="text-2xl font-black text-slate-800 mt-1"><%= stats.ordersToday %></p>
+            </div>
+
+            <!-- Revenue Today -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div class="bg-emerald-50 text-emerald-600 w-12 h-12 rounded-xl flex items-center justify-center text-xl mb-4">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <h3 class="text-slate-500 text-sm font-bold uppercase tracking-wider">Omset Hari Ini</h3>
+                <p class="text-2xl font-black text-slate-800 mt-1">Rp <%= stats.revenueToday.toLocaleString('id-ID') %></p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Broadcast Form -->
+            <div class="lg:col-span-2 space-y-8">
+                <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="bg-indigo-100 text-indigo-600 w-10 h-10 rounded-full flex items-center justify-center">
+                            <i class="fas fa-bullhorn"></i>
+                        </div>
+                        <h2 class="text-xl font-black text-slate-800">Kirim Broadcast</h2>
+                    </div>
+                    
+                    <% if (broadcastMsg) { %>
+                        <div class="bg-green-100 text-green-700 p-4 rounded-xl mb-6 font-bold flex items-center gap-3">
+                            <i class="fas fa-check-circle"></i> <%= broadcastMsg %>
+                        </div>
+                    <% } %>
+
+                    <form action="/admin/broadcast" method="POST">
+                        <div class="mb-4">
+                            <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">Target Audience</label>
+                            <select name="target" class="w-full px-4 py-3 rounded-xl border-2 border-slate-100 focus:border-indigo-500 outline-none font-semibold text-slate-600 bg-slate-50">
+                                <option value="all">Semua Pelanggan (<%= stats.totalCustomers %> User)</option>
+                                <option value="today">Pelanggan Hari Ini (<%= stats.ordersToday %> User)</option>
+                            </select>
+                        </div>
+                        <div class="mb-6">
+                            <label class="block text-sm font-bold text-slate-700 mb-2 uppercase tracking-wide">Pesan Broadcast</label>
+                            <textarea name="message" rows="4" placeholder="Ketik pesan promo atau informasi disini..." required class="w-full px-4 py-3 rounded-xl border-2 border-slate-100 focus:border-indigo-500 outline-none font-semibold text-slate-600 bg-slate-50"></textarea>
+                            <p class="text-xs text-slate-400 mt-2 font-bold">* Pesan akan dikirim satu per satu dengan jeda aman.</p>
+                        </div>
+                        <button type="submit" class="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 active:scale-95 flex items-center gap-2">
+                            <i class="fas fa-paper-plane"></i> Kirim Pesan
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Recent Logs -->
+                <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100">
+                   <div class="flex items-center gap-4 mb-6">
+                        <div class="bg-slate-100 text-slate-600 w-10 h-10 rounded-full flex items-center justify-center">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <h2 class="text-xl font-black text-slate-800">Log Aktivitas Terakhir</h2>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-100 text-xs font-black text-slate-400 uppercase tracking-widest">
+                                    <th class="py-3 px-4">Waktu</th>
+                                    <th class="py-3 px-4">Aksi</th>
+                                    <th class="py-3 px-4">Detail</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm font-medium text-slate-600">
+                                <% logs.forEach(log => { %>
+                                <tr class="border-b border-slate-50 hover:bg-slate-50 transition">
+                                    <td class="py-3 px-4"><%= new Date(log.createdAt).toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'}) %></td>
+                                    <td class="py-3 px-4">
+                                        <span class="px-2 py-1 rounded bg-slate-100 text-slate-600 text-[10px] font-bold uppercase"><%= log.action %></span>
+                                    </td>
+                                    <td class="py-3 px-4"><%= log.details %></td>
+                                </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Sidebar -->
+            <div class="space-y-6">
+                <div class="bg-slate-800 text-white p-6 rounded-[2rem] shadow-xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl -mr-16 -mt-16"></div>
+                    <h3 class="font-bold text-lg mb-4 relative z-10">Koneksi WhatsApp</h3>
+                    
+                    <div class="bg-white p-4 rounded-xl flex items-center justify-center min-h-[200px] mb-4" id="qrContainer">
+                        <% if (qrStatus === 'CONNECTED') { %>
+                             <div class="text-center">
+                                <i class="fas fa-check-circle text-5xl text-green-500 mb-2"></i>
+                                <p class="text-sm text-slate-600 font-bold">Terhubung</p>
+                                <p class="text-xs text-slate-400 mt-1">Bot siap digunakan</p>
+                             </div>
+                        <% } else if (qrCode) { %>
+                             <div class="text-center">
+                                <img src="<%= qrCode %>" alt="QR Code" class="w-40 h-40 mx-auto mb-2 border-2 border-slate-100 rounded-lg">
+                                <p class="text-xs text-slate-500 font-bold uppercase animate-pulse">Scan untuk Login</p>
+                             </div>
+                        <% } else { %>
+                             <div class="text-center">
+                                <i class="fas fa-sync fa-spin text-4xl text-slate-300 mb-2"></i>
+                                <p class="text-xs text-slate-400 font-bold uppercase">Menunggu QR Code...</p>
+                                <p class="text-[10px] text-slate-300 mt-1">Refresh jika lama</p>
+                             </div>
+                        <% } %>
+                    </div>
+
+                    <% if (qrStatus !== 'CONNECTED') { %>
+                    <p class="text-center text-xs text-white/60 mb-2">Buka WhatsApp > Perangkat Tertaut > Tautkan Perangkat</p>
+                    <% } %>
+
+                    <!-- Force Re-login Button -->
+                    <form action="/admin/relogin-whatsapp" method="POST" class="mt-4 border-t border-white/10 pt-4" onsubmit="return confirm('Apakah Anda yakin ingin mereset koneksi WhatsApp? Sesi lama akan dihapus.');">
+                        <button type="submit" class="w-full bg-red-500/20 hover:bg-red-500/30 text-red-200 text-xs font-bold py-2 rounded-lg transition flex items-center justify-center gap-2">
+                            <i class="fas fa-power-off"></i> Reset Koneksi / Login Ulang
+                        </button>
+                    </form>
+                </div>
+
+                <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-lg text-slate-800 mb-4">Pengaturan Bot</h3>
+                    <form action="/admin/settings" method="POST">
+                        <div class="mb-4">
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Nomor Owner (Untuk Laporan)</label>
+                            <input type="text" name="ownerNumber" value="<%= settings.ownerNumber || '' %>" placeholder="628..." class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-bold outline-none focus:border-blue-500">
+                        </div>
+                         <div class="flex items-center justify-between mb-4">
+                            <span class="text-sm font-bold text-slate-600">Auto Reply</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" name="autoReply" class="sr-only peer" <%= settings.autoReply ? 'checked' : '' %>>
+                                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                            </label>
+                        </div>
+                        <button type="submit" class="w-full bg-slate-800 text-white py-3 rounded-xl font-bold text-sm hover:bg-slate-900 transition">
+                            Simpan Pengaturan
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        const statusBotEl = document.getElementById('statusBot');
+        const statusTextEl = document.getElementById('statusText');
+        const statusBadgeEl = document.getElementById('statusBadge');
+        const qrContainerEl = document.getElementById('qrContainer');
+
+        socket.on('message', (msg) => {
+            console.log('Log:', msg);
+        });
+
+        socket.on('qr', (url) => {
+            // Update QR Image
+            qrContainerEl.innerHTML = `
+                <div class="text-center">
+                    <img src="${url}" alt="QR Code" class="w-40 h-40 mx-auto mb-2 border-2 border-slate-100 rounded-lg">
+                    <p class="text-xs text-slate-500 font-bold uppercase animate-pulse">Scan untuk Login</p>
+                </div>
+            `;
+            updateStatus('DISCONNECTED');
+        });
+
+        socket.on('ready', () => {
+            updateStatus('CONNECTED');
+        });
+
+        socket.on('authenticated', () => {
+            updateStatus('CONNECTED');
+        });
+
+        function updateStatus(status) {
+            if (status === 'CONNECTED') {
+                if(statusBotEl) statusBotEl.innerHTML = `
+                    <div class="bg-blue-50 text-blue-600 w-12 h-12 rounded-xl flex items-center justify-center text-xl">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold uppercase">Connected</span>
+                `;
+                if(statusTextEl) statusTextEl.textContent = 'Online';
+                
+                qrContainerEl.innerHTML = `
+                     <div class="text-center">
+                        <i class="fas fa-check-circle text-5xl text-green-500 mb-2"></i>
+                        <p class="text-sm text-slate-600 font-bold">Terhubung</p>
+                        <p class="text-xs text-slate-400 mt-1">Bot siap digunakan</p>
+                     </div>
+                `;
+            } else {
+                if(statusBotEl) statusBotEl.innerHTML = `
+                    <div class="bg-blue-50 text-blue-600 w-12 h-12 rounded-xl flex items-center justify-center text-xl">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold uppercase">Disconnected</span>
+                `;
+                if(statusTextEl) statusTextEl.textContent = 'Offline';
+            }
+        }
+    </script>
+</body>
+</html>

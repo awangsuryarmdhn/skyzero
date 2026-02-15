@@ -1,0 +1,24 @@
+{
+  "name": "bot-laundry",
+  "version": "1.0.0",
+  "description": "WhatsApp bot untuk manajemen Sky Laundry - cek status, broadcast, auto reminder",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js"
+  },
+  "author": "Sky Laundry",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^17.3.1",
+    "ejs": "^4.0.1",
+    "express": "^4.18.2",
+    "express-mysql-session": "^3.0.3",
+    "express-session": "^1.19.0",
+    "jsonwebtoken": "^9.0.3",
+    "mysql2": "^3.17.1",
+    "node-cron": "^4.2.1",
+    "qrcode": "^1.5.3",
+    "socket.io": "^4.7.2",
+    "whatsapp-web.js": "^1.23.0"
+  }
+}

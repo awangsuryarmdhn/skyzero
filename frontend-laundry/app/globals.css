@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 1. IMPORT FONT (WAJIB PALING ATAS) */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+/* 2. TAILWIND DIRECTIVES (SETELAH IMPORT) */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 3. CUSTOM STYLES (PALING BAWAH) */
+
+/* --- TAMBAHKAN INI DI BAGIAN ATAS --- */
+html {
+  scroll-behavior: smooth; /* Kunci untuk transisi halus */
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  overflow-x: hidden;
+}
+
+.glass-morphism {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+/* Animasi Reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Animasi Text Gradient */
+@keyframes textGradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.animate-text-gradient {
+  background: linear-gradient(90deg, #3b82f6, #60a5fa, #a855f7, #3b82f6);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textGradientFlow 4s linear infinite;
+}
+
+/* Animasi Lainnya */
+@keyframes shimmerMove {
+  0% { transform: translateX(-150%) skewX(-30deg); }
+  100% { transform: translateX(150%) skewX(-30deg); }
+}
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+.btn-shimmer::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; width: 60%; height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmerMove 3s infinite;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Blob Background */
+.bg-blob { position: absolute; border-radius: 50%; filter: blur(60px); z-index: -1; opacity: 0.12; pointer-events: none; }
+.bg-blob-sm { width: 300px; height: 300px; }
+@media (min-width: 768px) { .bg-blob-sm { width: 600px; height: 600px; filter: blur(100px); } }
+
+/* Radar & Wave (Untuk Hasil Status) */
+@keyframes radarPulse {
+  0% { transform: scale(1); opacity: 0.5; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+.radar-ring { position: absolute; border: 2px solid #3b82f6; border-radius: 50%; animation: radarPulse 2s infinite; }
+
+@keyframes shrink {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}

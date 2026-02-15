@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Bot Login</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f2f5;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #128C7E;
+        }
+        #qrcode {
+            margin: 20px 0;
+        }
+        #status {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+        #message {
+            color: #888;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>WhatsApp Bot Login</h1>
+        <div id="qrcode">
+            <p>Waiting for QR Code...</p>
+        </div>
+        <div id="status">Connecting...</div>
+        <div id="message"></div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const qrDiv = document.getElementById('qrcode');
+        const statusDiv = document.getElementById('status');
+        const messageDiv = document.getElementById('message');
+
+        socket.on('message', (msg) => {
+            messageDiv.textContent = msg;
+        });
+
+        socket.on('qr', (url) => {
+            qrDiv.innerHTML = `<img src="${url}" alt="QR Code">`;
+            statusDiv.textContent = 'Scan the QR Code with WhatsApp';
+            statusDiv.style.color = '#555';
+        });
+
+        socket.on('ready', (msg) => {
+            qrDiv.innerHTML = '✅';
+            statusDiv.textContent = msg;
+            statusDiv.style.color = 'green';
+        });
+
+        socket.on('authenticated', (msg) => {
+            qrDiv.innerHTML = '🔓';
+            statusDiv.textContent = msg;
+            statusDiv.style.color = 'blue';
+        });
+
+        socket.on('auth_failure', (msg) => {
+            statusDiv.textContent = msg;
+            statusDiv.style.color = 'red';
+        });
+    </script>
+</body>
+</html>

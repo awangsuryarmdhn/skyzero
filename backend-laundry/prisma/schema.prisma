@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql" // atau postgresql
+  url      = env("DATABASE_URL") // <--- KEMBALIKAN BARIS INI
+}
+
+enum OrderStatus {
+  PENDING
+  WASHING
+  IRONING
+  READY
+  COMPLETED
+}
+
+enum ServiceType {
+  KILOAN
+  SATUAN
+  EXPRESS
+}
+
+model Order {
+  id            String      @id @default(uuid())
+  orderId   String   @unique
+  customerName  String
+  phoneNumber  String   @default("-")
+  weight        Float
+  serviceType   ServiceType
+  totalPrice    Float
+  status        OrderStatus @default(PENDING)
+  isPaid       Boolean     @default(false) // false = Belum Lunas, true = Lunas
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String   // Password ini nanti harus di-hash (bcrypt), jangan plain text!
+  name      String?
+  createdAt DateTime @default(now())
+}
+
+model ActivityLog {
+  id        Int      @id @default(autoincrement())
+  action    String   // Contoh: "CREATE_ORDER", "UPDATE_STATUS", "DELETE"
+  details   String   // Contoh: "Pesanan Budi (123) diubah menjadi COMPLETED"
+  createdAt DateTime @default(now())
+}
